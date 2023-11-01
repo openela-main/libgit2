@@ -1,0 +1,31 @@
+From 25567536469c9cbe75445bb9875c7f10ff7f9ba2 Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@brianlane.com>
+Date: Wed, 15 May 2019 12:05:34 -0700
+Subject: [PATCH] Disable online tests
+
+We do not support online tests during build, and with ssh disabled that
+one also doesn't apply.
+
+Related: rhbz#1638880
+---
+ CMakeLists.txt | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index eabc524..5a23d01 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -705,10 +705,6 @@ IF (BUILD_CLAR)
+ 	ENABLE_TESTING()
+ 
+ 	ADD_TEST(offline   libgit2_clar -v -xonline)
+-	ADD_TEST(online    libgit2_clar -v -sonline)
+-	ADD_TEST(gitdaemon libgit2_clar -v -sonline::push)
+-	ADD_TEST(ssh       libgit2_clar -v -sonline::push -sonline::clone::ssh_cert -sonline::clone::ssh_with_paths)
+-	ADD_TEST(proxy     libgit2_clar -v -sonline::clone::proxy_credentials_in_url -sonline::clone::proxy_credentials_request)
+ ENDIF ()
+ 
+ IF (TAGS)
+-- 
+2.20.1
+

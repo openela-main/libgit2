@@ -1,0 +1,30 @@
+From 04916e405fb34f98497536ee5cec5b48c137dac1 Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Tue, 2 Jun 2020 10:39:45 -0700
+Subject: [PATCH] openssl: Use the system profile ciphers
+
+On Fedora and RHEL we let the system decide which ciphers to use instead
+of setting them explicitly.
+
+Resolves: rhbz#1842814
+---
+ src/openssl_stream.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/openssl_stream.c b/src/openssl_stream.c
+index 6bab6b54a..fbf3bd578 100644
+--- a/src/openssl_stream.c
++++ b/src/openssl_stream.c
+@@ -35,7 +35,8 @@
+ 
+ SSL_CTX *git__ssl_ctx;
+ 
+-#define GIT_SSL_DEFAULT_CIPHERS "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-DSS-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-DSS-AES128-SHA256:DHE-DSS-AES256-SHA256:DHE-DSS-AES128-SHA:DHE-DSS-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA"
++/* rhbz#1842814 use the system defined ciphers. Override with GIT_OPT_SET_SSL_CIPHERS */
++#define GIT_SSL_DEFAULT_CIPHERS "PROFILE=SYSTEM"
+ 
+ #if defined(GIT_THREADS) && OPENSSL_VERSION_NUMBER < 0x10100000L
+ 
+-- 
+2.26.2
+

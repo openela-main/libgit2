@@ -1,0 +1,30 @@
+From 84e1cf46a5695623b4d18d63337858b131733f9b Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Wed, 5 Sep 2018 16:42:32 -0700
+Subject: [PATCH] Revert "cmake: disable optimization on debug builds"
+
+We want the CFLAGS optimization level to be used by gcc, not -O0
+
+This reverts commit a64532e107b40202d2cdd602c8c821f402bad429.
+
+Signed-off-by: Brian C. Lane <bcl@redhat.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index acce6fd89..9220be028 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -478,7 +478,7 @@ ELSE ()
+ 		SET(CMAKE_C_FLAGS "-std=c99 -D_POSIX_C_SOURCE=200112L -D__EXTENSIONS__ -D_POSIX_PTHREAD_SEMANTICS ${CMAKE_C_FLAGS}")
+ 	ENDIF()
+ 
+-	SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -O0")
++	SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG")
+ 
+ 	IF (MINGW OR MSYS) # MinGW and MSYS always do PIC and complain if we tell them to
+ 		STRING(REGEX REPLACE "-fPIC" "" CMAKE_SHARED_LIBRARY_C_FLAGS "${CMAKE_SHARED_LIBRARY_C_FLAGS}")
+-- 
+2.17.1
+
