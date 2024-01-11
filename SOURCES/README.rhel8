@@ -1,0 +1,2 @@
+This version of libgit2 is built without ssh support.  libssh2 is not shipped
+with RHEL 8 so the USE_SSH flag has been set to OFF in the build.

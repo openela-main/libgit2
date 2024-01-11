@@ -1,0 +1,28 @@
+From 53686ab27d6fa7f78274e6ec7efd846626e1eb65 Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Wed, 31 Oct 2018 12:13:01 -0700
+Subject: [PATCH] tests: Increase TOOBIG value used on i686
+
+0x0fffffff isn't big enough.
+
+Related: rhbz#1638880
+---
+ tests/buf/oom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/buf/oom.c b/tests/buf/oom.c
+index 16a03cc1a..c01e87895 100644
+--- a/tests/buf/oom.c
++++ b/tests/buf/oom.c
+@@ -12,7 +12,7 @@
+ #if defined(GIT_ARCH_64) && defined(__linux__)
+ # define TOOBIG 0x0fffffffffffffff
+ #elif defined(__linux__)
+-# define TOOBIG 0x0fffffff
++# define TOOBIG 0xffffff00
+ #elif defined(GIT_ARCH_64)
+ # define TOOBIG 0xffffffffffffff00
+ #else
+-- 
+2.20.1
+

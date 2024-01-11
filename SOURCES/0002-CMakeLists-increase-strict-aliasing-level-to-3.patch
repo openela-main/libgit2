@@ -1,0 +1,43 @@
+From ed4523f393760c28453cd93eae6d4eb6da5014fc Mon Sep 17 00:00:00 2001
+From: Patrick Steinhardt <ps@pks.im>
+Date: Fri, 16 Feb 2018 10:50:54 +0000
+Subject: [PATCH] CMakeLists: increase strict aliasing level to 3
+
+The strict aliasing rules disallow dereferencing the pointer to a
+variable of a certain type as another type, which is frequently used
+e.g. when casting structs to their base type. We currently have the
+warning level for strict aliasing rules set to `2`, which is described
+by gcc(1) as being "Aggressive, quick, not too precise." And in fact, we
+experience quite a lot of warnings when doing a release build due to
+that.
+
+GCC provides multiple levels, where higher levels are more accurate, but
+also slower due to the additional analysis required. Still, we want to
+have warning level 3 instead of 2 to avoid the current warnings we have
+in the Travis CI release builds. As this is the default warning level
+when no level is passed to `-Wstrict-aliasing`, we can just remove the
+level and use that default.
+
+(cherry picked from commit 522f3e4b4bedf9e4226f5e16498934b26d80dfbc)
+
+Related: rhbz#1624129
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9220be028..786e32966 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -497,7 +497,7 @@ ELSE ()
+ 
+ 	ADD_C_FLAG_IF_SUPPORTED(-Wdocumentation)
+ 	ADD_C_FLAG_IF_SUPPORTED(-Wno-missing-field-initializers)
+-	ADD_C_FLAG_IF_SUPPORTED(-Wstrict-aliasing=2)
++	ADD_C_FLAG_IF_SUPPORTED(-Wstrict-aliasing)
+ 	ADD_C_FLAG_IF_SUPPORTED(-Wstrict-prototypes)
+ 	ADD_C_FLAG_IF_SUPPORTED(-Wdeclaration-after-statement)
+ 	ADD_C_FLAG_IF_SUPPORTED(-Wno-unused-const-variable)
+-- 
+2.17.1
+
